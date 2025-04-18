@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "208848159580",
+    "project_id": "profile-listing-caaa5",
+    "storage_bucket": "profile-listing-caaa5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:208848159580:android:1100ccbe481ca0b08ab799",
+        "android_client_info": {
+          "package_name": "com.example.profile_listing"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzvFXoE9AxU7DWx9SiuN2scq1Im6f2YlQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
