@@ -14,4 +14,9 @@ class AppColors {
   // Text colors
   static const Color primaryText = Color(0xFF1B1A57);
   static const Color secondaryText = Color(0xFF4F5E7B);
+  static const Color profileTitleText = Color(0xFF333333);
+  static const Color profileContentTitleText = Color(0xFF783052);
+
+  // Button colors
+  static const Color primaryButton = Color(0xFFB90A5D);
 }

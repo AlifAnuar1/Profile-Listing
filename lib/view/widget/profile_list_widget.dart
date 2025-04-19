@@ -52,14 +52,6 @@ class _ProfileListWidgetState extends State<ProfileListWidget> {
           itemCount: items.length,
           itemBuilder: (context, index) {
             return ProfileListItem();
-            //return ListTile(
-            //  title: Text(items[index]),
-            //  leading: const Icon(Icons.list),
-            //  onTap: () {
-            //    Handle item tap
-            //    print("Tapped on ${items[index]}");
-            //  },
-            //);
           },
         ),
       );
