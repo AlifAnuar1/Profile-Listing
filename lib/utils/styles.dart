@@ -10,6 +10,9 @@ class AppColors {
   static const Color background = Color(0xFFF1F1F1);
   static const Color border = Color(0xFFDADADA);
   static const Color itemBackground = Color(0xFFF8F8F8);
+  static const Color dialogBackground = Color(0xFFFFFFFF);
+  static const Color divider = Color(0xFFFF037A);
+  static const Color dividerDialog = Color(0xFFDADADA);
 
   // Text colors
   static const Color primaryText = Color(0xFF1B1A57);

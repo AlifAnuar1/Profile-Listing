@@ -98,6 +98,12 @@
       "languageVersion": "3.5"
     },
     {
+      "name": "flutter_slidable",
+      "rootUri": "file:///Users/zacks/.pub-cache/hosted/pub.dev/flutter_slidable-4.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
+    },
+    {
       "name": "flutter_test",
       "rootUri": "file:///Users/zacks/Development/flutter/packages/flutter_test",
       "packageUri": "lib/",
@@ -230,7 +236,7 @@
       "languageVersion": "3.7"
     }
   ],
-  "generated": "2025-04-18T07:53:07.805990Z",
+  "generated": "2025-04-19T06:17:38.027081Z",
   "generator": "pub",
   "generatorVersion": "3.7.0",
   "flutterRoot": "file:///Users/zacks/Development/flutter",
