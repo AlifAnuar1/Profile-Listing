@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:profile_listing/classes/profile_class.dart';
 import 'package:profile_listing/utils/styles.dart';
 import 'package:profile_listing/view/pages/profile_details_page.dart';
 import 'package:profile_listing/view/pages/profile_edit_details_page.dart';
 
 class ProfileListItem extends StatefulWidget {
-  const ProfileListItem({super.key});
+  const ProfileListItem({super.key, required this.profile});
+
+  final Profile profile;
 
   @override
   State<ProfileListItem> createState() => _ProfileListItemState();
@@ -29,7 +32,9 @@ class _ProfileListItemState extends State<ProfileListItem> {
                       context,
                       MaterialPageRoute(
                         builder: (context) {
-                          return ProfileEditDetailsPage();
+                          return ProfileEditDetailsPage(
+                            profileId: widget.profile.id!,
+                          );
                         },
                       ),
                     );
@@ -45,15 +50,14 @@ class _ProfileListItemState extends State<ProfileListItem> {
                 ),
                 Container(
                   width: 1.5, // Width of the divider
-                  color: AppColors.divider, // Divider color
+                  color: AppColors.divider,
                   margin: EdgeInsets.symmetric(
                     vertical: 8.0,
                   ), // Vertical spacing
                 ),
                 InkWell(
                   onTap: () {
-                    //_onDeleteProfile();
-                    _onTestDialog();
+                    _onDeleteProfile();
                   },
                   child: Padding(
                     padding: EdgeInsets.all(32.0),
@@ -75,7 +79,7 @@ class _ProfileListItemState extends State<ProfileListItem> {
             context,
             MaterialPageRoute(
               builder: (context) {
-                return ProfileDetailsPage();
+                return ProfileDetailsPage(profileId: widget.profile.id!,);
               },
             ),
           );
@@ -103,12 +107,15 @@ class _ProfileListItemState extends State<ProfileListItem> {
                       Positioned(
                         bottom: 0,
                         right: 0,
-                        child: Image.asset(
-                          'assets/images/icon_favourite.png',
-                          width: 18,
-                          height: 16.88,
-                          fit: BoxFit.cover,
-                        ),
+                        child:
+                            widget.profile.isFavourite
+                                ? Image.asset(
+                                  'assets/images/icon_favourite.png',
+                                  width: 18,
+                                  height: 16.88,
+                                  fit: BoxFit.cover,
+                                )
+                                : SizedBox.shrink(),
                       ),
                     ],
                   ),
@@ -119,7 +126,7 @@ class _ProfileListItemState extends State<ProfileListItem> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Darlene Steward",
+                          "${widget.profile.firstName} ${widget.profile.lastName}",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16.0,
@@ -127,7 +134,7 @@ class _ProfileListItemState extends State<ProfileListItem> {
                           ),
                         ),
                         Text(
-                          "darlene.steward7@gmail.com",
+                          "${widget.profile.email}",
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             fontSize: 14.0,
@@ -155,26 +162,6 @@ class _ProfileListItemState extends State<ProfileListItem> {
   }
 
   void _onDeleteProfile() {
-    showDialog(
-      context: context,
-      builder:
-          (context) => AlertDialog(
-            title: Text(
-              "Are you sure you want to delete “Fullsnack Designer” from your contact?",
-            ),
-            content: Text("This action cannot be undone."),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text("Cancel"),
-              ),
-              TextButton(onPressed: () {}, child: Text("Delete")),
-            ],
-          ),
-    );
-  }
-
-  void _onTestDialog() {
     showDialog(
       context: context,
       builder:
@@ -258,7 +245,6 @@ class _ProfileListItemState extends State<ProfileListItem> {
                       ),
                     ],
                   ),
-                
                 ],
               ),
             ),

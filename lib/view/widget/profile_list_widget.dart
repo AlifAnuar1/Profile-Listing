@@ -1,17 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:profile_listing/classes/profile_class.dart';
 import 'package:profile_listing/view/item/profile_list_item.dart';
 
-class ProfileListWidget extends StatefulWidget {
+class ProfileListWidget extends StatelessWidget {
   const ProfileListWidget({super.key, required this.profileList});
 
-  final List<String> profileList;
-
-  @override
-  State<ProfileListWidget> createState() => _ProfileListWidgetState();
-}
-
-class _ProfileListWidgetState extends State<ProfileListWidget> {
-  List<String> items = ["Darlene","2"];
+  final List<Profile> profileList;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +13,7 @@ class _ProfileListWidgetState extends State<ProfileListWidget> {
   }
 
   Widget _buildBody() {
-    if (items.isEmpty) {
+    if (profileList.isEmpty) {
       return Padding(
         padding: EdgeInsets.all(16.0),
         child: Center(
@@ -49,9 +43,9 @@ class _ProfileListWidgetState extends State<ProfileListWidget> {
         padding: EdgeInsets.only(top: 16.0),
 
         child: ListView.builder(
-          itemCount: items.length,
+          itemCount: profileList.length,
           itemBuilder: (context, index) {
-            return ProfileListItem();
+            return ProfileListItem(profile: profileList[index]);
           },
         ),
       );
