@@ -50,22 +50,47 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                 alignment: Alignment.bottomRight,
                 children: [
                   ClipOval(
-                    child: Image.asset(
-                      'assets/images/user_darlene.png',
-                      width: 135,
-                      height: 135,
-                      fit: BoxFit.cover,
-                    ),
+                    child:
+                        _profile.profilePicUrl != null &&
+                                _profile.profilePicUrl!.isNotEmpty
+                            ? Image.network(
+                              _profile.profilePicUrl!,
+                              width: 135,
+                              height: 135,
+                              fit: BoxFit.cover,
+                            )
+                            : SizedBox(width: 135, height: 135),
                   ),
                   Positioned(
                     bottom: 0,
                     right: 0,
-                    child: Image.asset(
-                      'assets/images/icon_favourite.png',
-                      width: 32,
-                      height: 30,
-                      fit: BoxFit.cover,
-                    ),
+                    child:
+                        _profile.isFavourite
+                            ? InkWell(
+                              onTap: () {
+                                _onUpdateFavourite(_profile.isFavourite);
+                              },
+                              child: Image.asset(
+                                'assets/images/icon_favourite.png',
+                                width: 32,
+                                height: 30,
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                            : InkWell(
+                              onTap: () {
+                                _onUpdateFavourite(_profile.isFavourite);
+                              },
+                              child: SizedBox(
+                                width: 32,
+                                height: 30,
+                                child: Icon(
+                                  Icons.star_border_outlined,
+                                  size: 32,
+                                  color: Colors.amber,
+                                ),
+                              ),
+                            ),
                   ),
                 ],
               ),
@@ -137,6 +162,23 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
         ),
       ],
     );
+  }
+
+  Future<void> _onUpdateFavourite(bool isFavourite) async {
+    try {
+      await _profileDao.onUpdateFavourite(_profile.id!, !isFavourite);
+
+      setState(() {
+        _profile = _profile.copyWith(isFavourite: !isFavourite);
+      });
+
+      print("Profile updated successfully!");
+    } catch (e) {
+      print("Error updating profile: $e");
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Failed to update profile: $e')));
+    }
   }
 
   Future<void> _onGetProfile() async {

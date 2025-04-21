@@ -79,7 +79,7 @@ class _ProfileListItemState extends State<ProfileListItem> {
             context,
             MaterialPageRoute(
               builder: (context) {
-                return ProfileDetailsPage(profileId: widget.profile.id!,);
+                return ProfileDetailsPage(profileId: widget.profile.id!);
               },
             ),
           );
@@ -97,12 +97,16 @@ class _ProfileListItemState extends State<ProfileListItem> {
                     alignment: Alignment.bottomRight,
                     children: [
                       ClipOval(
-                        child: Image.asset(
-                          'assets/images/user_darlene.png',
-                          width: 63,
-                          height: 63,
-                          fit: BoxFit.cover,
-                        ),
+                        child:
+                            widget.profile.profilePicUrl != null &&
+                                    widget.profile.profilePicUrl!.isNotEmpty
+                                ? Image.network(
+                                  widget.profile.profilePicUrl!,
+                                  width: 63,
+                                  height: 63,
+                                  fit: BoxFit.cover,
+                                )
+                                : SizedBox(width: 63, height: 63),
                       ),
                       Positioned(
                         bottom: 0,

@@ -15,6 +15,24 @@ class Profile {
     required this.isFavourite,
   });
 
+  Profile copyWith({
+    String? id,
+    String? firstName,
+    String? lastName,
+    String? email,
+    String? profilePicUrl,
+    bool? isFavourite,
+  }) {
+    return Profile(
+      id: id ?? this.id,
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      email: email ?? this.email,
+      profilePicUrl: profilePicUrl ?? this.profilePicUrl,
+      isFavourite: isFavourite ?? this.isFavourite,
+    );
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'id': id ?? '',

@@ -19,25 +19,29 @@ class ProfileDao {
   }
 
   Future<void> onUpdateProfile(String profileId, Profile updatedProfile) async {
-  try {
-    if (profileId.isEmpty) {
-      throw Exception("Invalid profileId: Cannot update a profile with an empty ID.");
+    try {
+      if (profileId.isEmpty) {
+        throw Exception(
+          "Invalid profileId: Cannot update a profile with an empty ID.",
+        );
+      }
+
+      final Map<String, dynamic> updatedData = updatedProfile.toMap();
+
+      if (updatedData.isEmpty) {
+        throw Exception(
+          "Invalid updatedProfile: The profile data cannot be empty.",
+        );
+      }
+
+      await _databaseRef.child(profileId).update(updatedData);
+
+      print("Profile updated successfully for profileId: $profileId");
+    } catch (e) {
+      print("Error updating profile with profileId '$profileId': $e");
+      throw Exception("Failed to update profile: $e");
     }
-
-    final Map<String, dynamic> updatedData = updatedProfile.toMap();
-
-    if (updatedData.isEmpty) {
-      throw Exception("Invalid updatedProfile: The profile data cannot be empty.");
-    }
-
-    await _databaseRef.child(profileId).update(updatedData);
-
-    print("Profile updated successfully for profileId: $profileId");
-  } catch (e) {
-    print("Error updating profile with profileId '$profileId': $e");
-    throw Exception("Failed to update profile: $e");
   }
-}
 
   Future<void> onDeleteProfile(String id) async {
     await _databaseRef.child(id).remove();
@@ -97,6 +101,26 @@ class ProfileDao {
       throw Exception(
         "Cannot Retrieve Profile with ProfileId '$profileId': $e",
       );
+    }
+  }
+
+  Future<void> onUpdateProfilePicUrl(String profileId, String imageUrl) async {
+    try {
+      await _databaseRef.child(profileId).update({'profilePicUrl': imageUrl});
+      print("Profile image URL updated successfully in the database.");
+    } catch (e) {
+      print("Error updating profile image URL: $e");
+      throw Exception("Failed to update profile image URL: $e");
+    }
+  }
+
+  Future<void> onUpdateFavourite(String profileId, bool isFavourite) async {
+    try {
+      await _databaseRef.child(profileId).update({'isFavourite': isFavourite});
+      print("Profile updated successfully in the database.");
+    } catch (e) {
+      print("Error updating profile: $e");
+      throw Exception("Failed to update profile: $e");
     }
   }
 }
