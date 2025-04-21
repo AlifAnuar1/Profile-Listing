@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:profile_listing/classes/profile_class.dart';
+import 'package:profile_listing/repository/profile_dao.dart';
 import 'package:profile_listing/utils/styles.dart';
 import 'package:profile_listing/view/pages/profile_details_page.dart';
 import 'package:profile_listing/view/pages/profile_edit_details_page.dart';
@@ -15,6 +16,8 @@ class ProfileListItem extends StatefulWidget {
 }
 
 class _ProfileListItemState extends State<ProfileListItem> {
+  final ProfileDao _profileDao = ProfileDao();
+
   @override
   Widget build(BuildContext context) {
     return Slidable(
@@ -49,15 +52,13 @@ class _ProfileListItemState extends State<ProfileListItem> {
                   ),
                 ),
                 Container(
-                  width: 1.5, // Width of the divider
+                  width: 1.5,
                   color: AppColors.divider,
-                  margin: EdgeInsets.symmetric(
-                    vertical: 8.0,
-                  ), // Vertical spacing
+                  margin: EdgeInsets.symmetric(vertical: 8.0),
                 ),
                 InkWell(
                   onTap: () {
-                    _onDeleteProfile();
+                    _onDeleteProfileButton();
                   },
                   child: Padding(
                     padding: EdgeInsets.all(32.0),
@@ -165,7 +166,7 @@ class _ProfileListItemState extends State<ProfileListItem> {
     );
   }
 
-  void _onDeleteProfile() {
+  void _onDeleteProfileButton() {
     showDialog(
       context: context,
       builder:
@@ -187,7 +188,7 @@ class _ProfileListItemState extends State<ProfileListItem> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Are you sure you want to delete “Fullsnack Designer” from your contact?",
+                          "Are you sure you want to delete '${widget.profile.firstName} ${widget.profile.lastName}' from your contact?",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16.0,
@@ -232,6 +233,7 @@ class _ProfileListItemState extends State<ProfileListItem> {
                         child: InkWell(
                           onTap: () {
                             Navigator.pop(context);
+                            _onDeleteProfile();
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
@@ -254,5 +256,18 @@ class _ProfileListItemState extends State<ProfileListItem> {
             ),
           ),
     );
+  }
+
+  void _onDeleteProfile() async {
+    try {
+      await _profileDao.onDeleteProfile(widget.profile.id!);
+
+      print("Profile successfully deleted!");
+    } catch (e) {
+      print("Error deleting profile: $e");
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Failed to delete profile: $e")));
+    }
   }
 }
