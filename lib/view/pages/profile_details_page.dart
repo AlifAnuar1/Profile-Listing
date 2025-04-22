@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:profile_listing/classes/profile_class.dart';
+import 'package:profile_listing/provider/profile_provider.dart';
 import 'package:profile_listing/repository/profile_dao.dart';
 import 'package:profile_listing/utils/styles.dart';
 import 'package:profile_listing/view/pages/profile_edit_details_page.dart';
 import 'package:profile_listing/view/widget/loading_widget.dart';
+import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfileDetailsPage extends StatefulWidget {
   const ProfileDetailsPage({super.key, required this.profileId});
@@ -104,18 +107,23 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                 ),
               ),
               OutlinedButton(
-                onPressed: () {
-                  if (_profile.id != '') {
-                    Navigator.push(
+                onPressed: () async {
+                  final updatedProfile = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder:
+                          (context) => ProfileEditDetailsPage(
+                            profileId: widget.profileId,
+                          ),
+                    ),
+                  );
+
+                  if (updatedProfile != null) {
+                    Provider.of<ProfileProvider>(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return ProfileEditDetailsPage(
-                            profileId: _profile.id!,
-                          );
-                        },
-                      ),
-                    );
+                      listen: false,
+                    ).onUpdateProfile(updatedProfile);
+                    _onGetProfile();
                   }
                 },
                 style: OutlinedButton.styleFrom(
@@ -152,7 +160,9 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 34.0),
           child: FilledButton(
-            onPressed: () {},
+            onPressed: () {
+              _onSendEmail(_profile.email ?? '');
+            },
             style: FilledButton.styleFrom(
               minimumSize: Size(double.infinity, 47.0),
               backgroundColor: AppColors.primaryButton,
@@ -164,6 +174,26 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
     );
   }
 
+  Future<void> _onSendEmail(String email) async {
+    String recipient = email;
+    const String subject = 'Subject of the Email';
+    const String body = 'Body of the email goes here.';
+
+    final Uri emailUri = Uri(
+      scheme: 'mailto',
+      path: recipient,
+      queryParameters: <String, String>{'subject': subject, 'body': body},
+    );
+
+    if (await canLaunchUrl(emailUri)) {
+      await launchUrl(emailUri);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('No email client found. Please try again.')),
+      );
+    }
+  }
+
   Future<void> _onUpdateFavourite(bool isFavourite) async {
     try {
       await _profileDao.onUpdateFavourite(_profile.id!, !isFavourite);
@@ -173,6 +203,11 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
       });
 
       print("Profile updated successfully!");
+
+      Provider.of<ProfileProvider>(
+        context,
+        listen: false,
+      ).onUpdateProfile(_profile);
     } catch (e) {
       print("Error updating profile: $e");
       ScaffoldMessenger.of(

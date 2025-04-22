@@ -1,43 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:profile_listing/classes/profile_class.dart';
 import 'package:profile_listing/view/item/profile_list_item.dart';
+import 'package:profile_listing/view/widget/empty_list_widget.dart';
 
 class ProfileListWidget extends StatelessWidget {
-  const ProfileListWidget({super.key, required this.profileList});
+  const ProfileListWidget({
+    super.key,
+    required this.profileList,
+    required this.onDeleteProfile,
+    required this.onRefresh,
+  });
 
   final List<Profile> profileList;
+  final Function(Profile) onDeleteProfile;
+  final VoidCallback onRefresh;
 
   @override
   Widget build(BuildContext context) {
-    return _buildBody();
+    return _initUI();
   }
 
-  Widget _buildBody() {
+  Widget _initUI() {
     if (profileList.isEmpty) {
-      return Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                'assets/images/icon_empty_list.png',
-                width: 150,
-                height: 150,
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                "Looks like your contact list is empty.",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
-              ),
-              const Text(
-                "Add a new contact now.",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
-              ),
-            ],
-          ),
-        ),
-      );
+      return EmptyListWidget();
     } else {
       return Padding(
         padding: EdgeInsets.only(top: 16.0),
@@ -45,7 +30,15 @@ class ProfileListWidget extends StatelessWidget {
         child: ListView.builder(
           itemCount: profileList.length,
           itemBuilder: (context, index) {
-            return ProfileListItem(profile: profileList[index]);
+            return ProfileListItem(
+              profile: profileList[index],
+              onDeleteProfile: () {
+                onDeleteProfile(profileList[index]);
+              },
+              onUpdateProfile: (Profile updatedProfile) {
+                onRefresh();
+              },
+            );
           },
         ),
       );

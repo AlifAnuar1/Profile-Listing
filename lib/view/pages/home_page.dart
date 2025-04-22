@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:profile_listing/classes/profile_class.dart';
-import 'package:profile_listing/repository/profile_dao.dart';
+import 'package:profile_listing/provider/profile_provider.dart';
 import 'package:profile_listing/utils/styles.dart';
 import 'package:profile_listing/view/widget/loading_widget.dart';
 import 'package:profile_listing/view/widget/profile_list_widget.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,23 +14,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final ProfileDao _profileDao = ProfileDao();
-
-  List<Profile> _allProfileList = [];
-  List<Profile> _filteredProfileList = [];
-  bool _isLoading = true;
-
   String _selectedFilter = "All";
   String _searchText = "";
 
   @override
   void initState() {
     super.initState();
-    _onGetProfileListing();
+    Provider.of<ProfileProvider>(context, listen: false).onGetAllProfiles();
   }
 
   @override
   Widget build(BuildContext context) {
+    final profileProvider = Provider.of<ProfileProvider>(context);
+
     return Scaffold(
       appBar: AppBar(title: Text("My Contact")),
       body: Container(
@@ -46,7 +43,7 @@ class _HomePageState extends State<HomePage> {
                     onChanged: (query) {
                       setState(() {
                         _searchText = query;
-                        _applyFilter();
+                        _applyFilter(profileProvider.profiles);
                       });
                     },
                     decoration: InputDecoration(
@@ -69,17 +66,25 @@ class _HomePageState extends State<HomePage> {
 
               child: Row(
                 children: [
-                  _filterContainer("All"),
+                  _filterContainer("All", profileProvider),
                   SizedBox(width: 8.0),
-                  _filterContainer("Favourite"),
+                  _filterContainer("Favourite", profileProvider),
                 ],
               ),
             ),
             Expanded(
               child:
-                  _isLoading
+                  profileProvider.profiles.isEmpty
                       ? LoadingWidget()
-                      : ProfileListWidget(profileList: _filteredProfileList),
+                      : ProfileListWidget(
+                        profileList: _applyFilter(profileProvider.profiles),
+                        onDeleteProfile: (Profile profile) {
+                          profileProvider.onDeleteProfile(profile.id!);
+                        },
+                        onRefresh: () {
+                          profileProvider.onGetAllProfiles();
+                        },
+                      ),
             ),
           ],
         ),
@@ -97,14 +102,16 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _filterContainer(String filter) {
+  // ----------------------  Widgets ----------------------
+
+  Widget _filterContainer(String filter, ProfileProvider profileProvider) {
     bool isSelected = _selectedFilter == filter;
 
     return InkWell(
       onTap: () {
         setState(() {
           _selectedFilter = filter;
-          _applyFilter();
+          _applyFilter(profileProvider.profiles);
         });
       },
       child: Container(
@@ -127,46 +134,30 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _applyFilter() {
-    List<Profile> filteredProfiles = List.from(_allProfileList);
+  // -----------------------  Logics ----------------------
+
+  List<Profile> _applyFilter(List<Profile> profiles) {
+    List<Profile> filteredProfiles = List.from(profiles);
 
     if (_selectedFilter == "Favourite") {
-      filteredProfiles =
-          filteredProfiles.where((profile) => profile.isFavourite).toList();
+      filteredProfiles = filteredProfiles.where((p) => p.isFavourite).toList();
     }
 
     if (_searchText.isNotEmpty) {
+      final query = _searchText.toLowerCase();
       filteredProfiles =
-          filteredProfiles.where((profile) {
-            final query = _searchText.toLowerCase();
-            return profile.firstName!.toLowerCase().contains(query) ||
-                profile.lastName!.toLowerCase().contains(query) ||
-                profile.email!.toLowerCase().contains(query);
-          }).toList();
+          filteredProfiles
+              .where(
+                (p) =>
+                    p.firstName!.toLowerCase().contains(query) ||
+                    p.lastName!.toLowerCase().contains(query) ||
+                    p.email!.toLowerCase().contains(query),
+              )
+              .toList();
     }
 
-    setState(() {
-      _filteredProfileList = filteredProfiles;
-    });
+    return filteredProfiles;
   }
 
-  Future<void> _onGetProfileListing() async {
-    try {
-      List<Profile> profiles = await _profileDao.onGetAllProfiles();
-
-      setState(() {
-        _allProfileList = profiles;
-        _filteredProfileList = profiles;
-        _isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        _isLoading = false;
-      });
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error Fetching Profile Listing: $e')),
-      );
-    }
-  }
+  // ------------------------------------------------------
 }

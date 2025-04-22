@@ -46,7 +46,7 @@
 		</data>
 		<key>Frameworks/App.framework/App</key>
 		<data>
-		ORzFm0PyheN4eowM19MnBfob3mM=
+		/iln3yajfJgCLpcbfX0DZR2yYk0=
 		</data>
 		<key>Frameworks/App.framework/Info.plist</key>
 		<data>
@@ -54,7 +54,7 @@
 		</data>
 		<key>Frameworks/App.framework/_CodeSignature/CodeResources</key>
 		<data>
-		4rr0HWDZ8r0qZSY+UUT2eWEe/oI=
+		7cJu7dvK1bWKruIradzC7qj/joM=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.bin</key>
 		<data>
@@ -70,7 +70,7 @@
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/NOTICES.Z</key>
 		<data>
-		Z4vMmhSo/E+/IVhpTpuOOfc/H8s=
+		kztyJ7onsDc0EIEFbx5/H0/UPlM=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/NativeAssetsManifest.json</key>
 		<data>
@@ -126,7 +126,7 @@
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/kernel_blob.bin</key>
 		<data>
-		M4dKKB/8I8o5vwSh98ONXKJlpwI=
+		GGSRAGDloPXUqfKh+SRjV7TkIuY=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
 		<data>
@@ -432,6 +432,26 @@
 		<data>
 		JTGYQTSkuJ7uGfD1SfjQTq3ngyk=
 		</data>
+		<key>Frameworks/url_launcher_ios.framework/Info.plist</key>
+		<data>
+		ghBspOmU3B+yJwYtuzdEL6wZsTs=
+		</data>
+		<key>Frameworks/url_launcher_ios.framework/_CodeSignature/CodeResources</key>
+		<data>
+		AxzFYyzMi+pK5EaJ0GfIFK/4lGI=
+		</data>
+		<key>Frameworks/url_launcher_ios.framework/url_launcher_ios</key>
+		<data>
+		rnmHp84CRccsFCvc818WGsB5Mdc=
+		</data>
+		<key>Frameworks/url_launcher_ios.framework/url_launcher_ios_privacy.bundle/Info.plist</key>
+		<data>
+		jdtA7v2Esz+/Jko5tMoSleTwp9M=
+		</data>
+		<key>Frameworks/url_launcher_ios.framework/url_launcher_ios_privacy.bundle/PrivacyInfo.xcprivacy</key>
+		<data>
+		/LX0ZlwxwIAIhjZaDB8EiH5KpXA=
+		</data>
 		<key>GoogleService-Info.plist</key>
 		<data>
 		79bm0kWL5KYvj7kp2uwincTdfz4=
@@ -446,7 +466,7 @@
 		</data>
 		<key>Runner.debug.dylib</key>
 		<data>
-		PG07ADCs0sx8S+WiqDcpv6EfAvY=
+		kxuIKav3RXN51Un6QFyK7+DfG58=
 		</data>
 		<key>__preview.dylib</key>
 		<data>
@@ -529,7 +549,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			MC3I+AiHdjG+BG5YAEXK2Z6V8bQFdJcyigtkLGxUV90=
+			EXj5j6F9RKNkmY8ozixzcDeAb7yUapNA4Y4b/EHPRaA=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/Info.plist</key>
@@ -543,7 +563,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			2dXSoE8sXtUy41xrGKVk4oS94Ds/1yazXNdhJXZzi4c=
+			F94YvtPmNBY2ujy1iZyTWu+1jkLLzIFnhlthVTOWHik=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.bin</key>
@@ -571,7 +591,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			BW89i1tUwszOUtu7jlCXqRUtOThXdtsajsBb6hO2FH0=
+			VrmvgkYHSlysAbNIVSwDDsZQPrZFyRQ21Lt61TFnLKo=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/NativeAssetsManifest.json</key>
@@ -669,7 +689,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			v6eUUIkbyCGLulNCKH/EOqpgm9r30qfXr8YHiLw+aNI=
+			Zs9YlHe4RatEmndnPwC7YHbL4sW9ibUZ2YMhwOKD4Xg=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
@@ -1204,6 +1224,41 @@
 			CsAKC37/AHnc4lLimrQdcc9YxslP5OROoRDO9cYpcOE=
 			</data>
 		</dict>
+		<key>Frameworks/url_launcher_ios.framework/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			g5QVveVtswzHVV8GC9ZyFElDXtjRfUbJvUb3XvA2SV4=
+			</data>
+		</dict>
+		<key>Frameworks/url_launcher_ios.framework/_CodeSignature/CodeResources</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			DaejrzrmhvRi/IjM0uvk7A/UrN3rWHXuOIgfUEogqKk=
+			</data>
+		</dict>
+		<key>Frameworks/url_launcher_ios.framework/url_launcher_ios</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			pWruXN6DsGECTpc72p9ce7zVvnvl3dsKLYlPollwt4s=
+			</data>
+		</dict>
+		<key>Frameworks/url_launcher_ios.framework/url_launcher_ios_privacy.bundle/Info.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			+KxyhqPZmHKntTS/NkSn5VTqMe2BcoJywDkVakEsJbY=
+			</data>
+		</dict>
+		<key>Frameworks/url_launcher_ios.framework/url_launcher_ios_privacy.bundle/PrivacyInfo.xcprivacy</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			bS2g2NkwIn1CjB2TY7CtbjoS4sm2jFzilxWKdBL8jDE=
+			</data>
+		</dict>
 		<key>GoogleService-Info.plist</key>
 		<dict>
 			<key>hash2</key>
@@ -1215,7 +1270,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			pFa2uj6D4gfF2MCUGD79Iiqg9de5qx6KfgA/CwvhYKU=
+			Qa17uU6pqz85czzfAWvxikBl8MKypUnDCY6vgrY8rfY=
 			</data>
 		</dict>
 		<key>__preview.dylib</key>

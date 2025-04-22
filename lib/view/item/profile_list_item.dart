@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:profile_listing/classes/profile_class.dart';
-import 'package:profile_listing/repository/profile_dao.dart';
+import 'package:profile_listing/provider/profile_provider.dart';
 import 'package:profile_listing/utils/styles.dart';
 import 'package:profile_listing/view/pages/profile_details_page.dart';
 import 'package:profile_listing/view/pages/profile_edit_details_page.dart';
+import 'package:provider/provider.dart';
 
-class ProfileListItem extends StatefulWidget {
-  const ProfileListItem({super.key, required this.profile});
+class ProfileListItem extends StatelessWidget {
+  const ProfileListItem({
+    super.key,
+    required this.profile,
+    required this.onDeleteProfile,
+    required this.onUpdateProfile,
+  });
 
   final Profile profile;
-
-  @override
-  State<ProfileListItem> createState() => _ProfileListItemState();
-}
-
-class _ProfileListItemState extends State<ProfileListItem> {
-  final ProfileDao _profileDao = ProfileDao();
+  final VoidCallback onDeleteProfile;
+  final Function(Profile) onUpdateProfile;
 
   @override
   Widget build(BuildContext context) {
@@ -30,17 +31,22 @@ class _ProfileListItemState extends State<ProfileListItem> {
             child: Row(
               children: [
                 InkWell(
-                  onTap: () {
-                    Navigator.push(
+                  onTap: () async {
+                    final updatedProfile = await Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) {
-                          return ProfileEditDetailsPage(
-                            profileId: widget.profile.id!,
-                          );
-                        },
+                        builder:
+                            (context) =>
+                                ProfileEditDetailsPage(profileId: profile.id!),
                       ),
                     );
+
+                    if (updatedProfile != null) {
+                      Provider.of<ProfileProvider>(
+                        context,
+                        listen: false,
+                      ).onUpdateProfile(updatedProfile);
+                    }
                   },
                   child: Padding(
                     padding: EdgeInsets.all(32.0),
@@ -58,7 +64,7 @@ class _ProfileListItemState extends State<ProfileListItem> {
                 ),
                 InkWell(
                   onTap: () {
-                    _onDeleteProfileButton();
+                    _onDeleteProfileButton(context);
                   },
                   child: Padding(
                     padding: EdgeInsets.all(32.0),
@@ -75,15 +81,20 @@ class _ProfileListItemState extends State<ProfileListItem> {
         ],
       ),
       child: InkWell(
-        onTap: () {
-          Navigator.push(
+        onTap: () async {
+          final updatedProfile = await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) {
-                return ProfileDetailsPage(profileId: widget.profile.id!);
-              },
+              builder: (context) => ProfileDetailsPage(profileId: profile.id!),
             ),
           );
+
+          if (updatedProfile != null) {
+            Provider.of<ProfileProvider>(
+              context,
+              listen: false,
+            ).onUpdateProfile(updatedProfile);
+          }
         },
         child: Padding(
           padding: EdgeInsets.only(bottom: 4.0),
@@ -99,10 +110,10 @@ class _ProfileListItemState extends State<ProfileListItem> {
                     children: [
                       ClipOval(
                         child:
-                            widget.profile.profilePicUrl != null &&
-                                    widget.profile.profilePicUrl!.isNotEmpty
+                            profile.profilePicUrl != null &&
+                                    profile.profilePicUrl!.isNotEmpty
                                 ? Image.network(
-                                  widget.profile.profilePicUrl!,
+                                  profile.profilePicUrl!,
                                   width: 63,
                                   height: 63,
                                   fit: BoxFit.cover,
@@ -113,7 +124,7 @@ class _ProfileListItemState extends State<ProfileListItem> {
                         bottom: 0,
                         right: 0,
                         child:
-                            widget.profile.isFavourite
+                            profile.isFavourite
                                 ? Image.asset(
                                   'assets/images/icon_favourite.png',
                                   width: 18,
@@ -131,7 +142,7 @@ class _ProfileListItemState extends State<ProfileListItem> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "${widget.profile.firstName} ${widget.profile.lastName}",
+                          "${profile.firstName} ${profile.lastName}",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16.0,
@@ -139,7 +150,7 @@ class _ProfileListItemState extends State<ProfileListItem> {
                           ),
                         ),
                         Text(
-                          "${widget.profile.email}",
+                          "${profile.email}",
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             fontSize: 14.0,
@@ -166,7 +177,7 @@ class _ProfileListItemState extends State<ProfileListItem> {
     );
   }
 
-  void _onDeleteProfileButton() {
+  void _onDeleteProfileButton(BuildContext context) {
     showDialog(
       context: context,
       builder:
@@ -188,7 +199,7 @@ class _ProfileListItemState extends State<ProfileListItem> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Are you sure you want to delete '${widget.profile.firstName} ${widget.profile.lastName}' from your contact?",
+                          "Are you sure you want to delete '${profile.firstName} ${profile.lastName}' from your contact?",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16.0,
@@ -233,7 +244,10 @@ class _ProfileListItemState extends State<ProfileListItem> {
                         child: InkWell(
                           onTap: () {
                             Navigator.pop(context);
-                            _onDeleteProfile();
+                            Provider.of<ProfileProvider>(
+                              context,
+                              listen: false,
+                            ).onDeleteProfile(profile.id!);
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
@@ -256,18 +270,5 @@ class _ProfileListItemState extends State<ProfileListItem> {
             ),
           ),
     );
-  }
-
-  void _onDeleteProfile() async {
-    try {
-      await _profileDao.onDeleteProfile(widget.profile.id!);
-
-      print("Profile successfully deleted!");
-    } catch (e) {
-      print("Error deleting profile: $e");
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Failed to delete profile: $e")));
-    }
   }
 }

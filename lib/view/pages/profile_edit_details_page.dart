@@ -4,9 +4,11 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:profile_listing/classes/profile_class.dart';
+import 'package:profile_listing/provider/profile_provider.dart';
 import 'package:profile_listing/repository/profile_dao.dart';
 import 'package:profile_listing/utils/styles.dart';
 import 'package:profile_listing/view/widget/loading_widget.dart';
+import 'package:provider/provider.dart';
 
 class ProfileEditDetailsPage extends StatefulWidget {
   const ProfileEditDetailsPage({super.key, required this.profileId});
@@ -200,16 +202,22 @@ class _ProfileEditDetailsPageState extends State<ProfileEditDetailsPage> {
       final storageRef = FirebaseStorage.instance.ref().child(filePath);
 
       await storageRef.putFile(imageFile);
-
       final String downloadUrl = await storageRef.getDownloadURL();
 
       await _profileDao.onUpdateProfilePicUrl(_profile.id!, downloadUrl);
 
+      final updatedProfile = _profile.copyWith(profilePicUrl: downloadUrl);
+
       setState(() {
-        _profile = _profile.copyWith(profilePicUrl: downloadUrl);
+        _profile = updatedProfile;
       });
 
       print("Image uploaded and URL updated successfully!");
+
+      Provider.of<ProfileProvider>(
+        context,
+        listen: false,
+      ).onUpdateProfile(updatedProfile);
     } catch (e) {
       print("Error uploading image: $e");
       ScaffoldMessenger.of(
@@ -245,22 +253,25 @@ class _ProfileEditDetailsPageState extends State<ProfileEditDetailsPage> {
 
   void _onUpdateProfile() async {
     try {
-      final updatedProfile = Profile(
-        id: _profile.id,
+      final updatedProfile = _profile.copyWith(
         firstName: _firstNameController.text,
         lastName: _lastNameController.text,
         email: _emailController.text,
-        profilePicUrl: _profile.profilePicUrl,
-        isFavourite: _profile.isFavourite,
       );
 
-      await _profileDao.onUpdateProfile(_profile.id!, updatedProfile);
+      await _profileDao.onUpdateProfile(updatedProfile.id!, updatedProfile);
 
-      print("Profile successfully updated!");
+      Provider.of<ProfileProvider>(
+        context,
+        listen: false,
+      ).onUpdateProfile(updatedProfile);
 
-      _onGetProfile();
+      Navigator.pop(context, updatedProfile);
     } catch (e) {
       print("Failed to update profile : $e");
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Failed to update profile: $e')));
     }
   }
 }
