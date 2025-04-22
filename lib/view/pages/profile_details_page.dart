@@ -161,7 +161,7 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
           padding: const EdgeInsets.symmetric(horizontal: 34.0),
           child: FilledButton(
             onPressed: () {
-              _onSendEmail(_profile.email ?? '');
+              _onSendEmail(context, _profile.email ?? '');
             },
             style: FilledButton.styleFrom(
               minimumSize: Size(double.infinity, 47.0),
@@ -174,17 +174,20 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
     );
   }
 
-  Future<void> _onSendEmail(String email) async {
-    String recipient = email;
-    const String subject = 'Subject of the Email';
-    const String body = 'Body of the email goes here.';
+  Future<void> _onSendEmail(BuildContext context, String email) async {
+  const String subject = 'Subject of the Email';
+  const String body = 'Body of the email goes here.';
 
-    final Uri emailUri = Uri(
-      scheme: 'mailto',
-      path: recipient,
-      queryParameters: <String, String>{'subject': subject, 'body': body},
-    );
+  final Uri emailUri = Uri(
+    scheme: 'mailto',
+    path: email,
+    queryParameters: <String, String>{
+      'subject': subject,
+      'body': body,
+    },
+  );
 
+  try {
     if (await canLaunchUrl(emailUri)) {
       await launchUrl(emailUri);
     } else {
@@ -192,7 +195,12 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
         SnackBar(content: Text('No email client found. Please try again.')),
       );
     }
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('An error occurred: ${e.toString()}')),
+    );
   }
+}
 
   Future<void> _onUpdateFavourite(bool isFavourite) async {
     try {

@@ -47,5 +47,9 @@
 	<true/>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>We need access to your photo library to upload profile pictures.</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+    	<string>mailto</string>
+	</array>
 </dict>
 </plist>
